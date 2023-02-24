@@ -1,4 +1,5 @@
 #!/usr/bin/env bash
+# this script is displaying "best school" 10 times
 file_h="/etc/passwd"
 while IFS= read -r line
 do
