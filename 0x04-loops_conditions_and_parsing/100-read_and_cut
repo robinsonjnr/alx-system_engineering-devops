@@ -1,5 +1,6 @@
 #!/usr/bin/env bash
-# this script is displaying "best school" 10 times
+# Displays the contents of the file `/etc/passwd`.
+#   Only displays the username, user id, and user home directory path.
 file_h="/etc/passwd"
 while IFS= read -r line
 do
