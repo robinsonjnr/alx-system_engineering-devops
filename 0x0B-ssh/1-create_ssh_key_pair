@@ -1,4 +1,4 @@
 #!/usr/bin/env bash
-# It connects to a server using a private key
+# Bash script that creates a RSA key pair
 
-ssh -i ~/.ssh/holberton ubuntu@35.196.4.24
+ssh-keygen -f school -b 4096 -N betty
