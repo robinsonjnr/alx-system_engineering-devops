@@ -1,0 +1,7 @@
+Host *
+    IdentityFile ~/.ssh/id_rsa
+
+Host 35.196.4.24
+    User ubuntu
+    IdentityFile ~/.ssh/holberton
+    GSSAPIAuthentication yes
