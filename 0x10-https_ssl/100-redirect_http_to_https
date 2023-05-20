@@ -1,3 +1,4 @@
+
 global
         log /dev/log    local0
         log /dev/log    local1 notice
@@ -38,10 +39,12 @@ frontend Load_Balancer
         bind *:80
 
         # This is our new config that listens on port 443 for SSL connections
-        bind *:443 ssl crt /etc/ssl/www.obinna.tech/www.obinna.tech.pem
+        bind *:443 ssl crt /etc/letsencrypt/live/www.obinna.tech/fullchain.pem
 
-        # Redirect if HTTPS is *not* used
-        redirect scheme https code 301 if !{ ssl_fc }
+        mode http
+	redirect scheme https code 301 if !{ ssl_fc }
+        option forwardfor
+        option http-server-close
 
         # Test URI to see if its a letsencrypt request
         acl letsencrypt-acl path_beg /.well-known/acme-challenge/
@@ -54,7 +57,8 @@ backend letsencrypt-backend
         server letsencrypt 127.0.0.1:8888
 
 backend Web_Servers
+        mode http
         balance roundrobin
-        server 746-web-01 54.197.102.210:80 check
-        server 746-web-02 54.144.130.85:80 check
+        server 166072-web-01 54.197.102.210:80 check
+        server 166072-web-02 54.144.130.85:80 check
 
