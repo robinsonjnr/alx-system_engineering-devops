@@ -1,25 +1,30 @@
 #!/usr/bin/python3
-# using this REST API, for a given employee ID,
-# returns information about his/her TODO list progress
-# to export data in the JSON format.
+"""Exports to-do list information for a given employee ID to JSON format."""
+import csv
 import json
-from requests import get
-from sys import argv
+import requests
+import sys
 
 
-def api_to_json(user_id):
-    task_list = []
-    url = "https://jsonplaceholder.typicode.com/"
-    user = get(url + "users/{}".format(user_id)).json()
-    tasks = get(url + "todos?userId={}".format(user_id)).json()
+if __name__ == '__main__':
+    USER_ID = sys.argv[1]
+    url_to_user = 'https://jsonplaceholder.typicode.com/users/' + USER_ID
+    res = requests.get(url_to_user)
+    """Documentation"""
+    USERNAME = res.json().get('username')
+    """Documentation"""
+    url_to_task = url_to_user + '/todos'
+    res = requests.get(url_to_task)
+    tasks = res.json()
+
+    dict_data = {USER_ID: []}
     for task in tasks:
-        tdict = {}
-        tdict["task"] = task.get("title")
-        tdict["completed"] = task.get("completed")
-        tdict["username"] = user.get("username")
-        task_list.append(tdict)
-    with open("{}.json".format(user_id), 'w', newline='') as json_file:
-        json.dump({argv[1]: task_list}, json_file)
-
-if __name__ == "__main__":
-    api_to_json(int(argv[1]))
+        TASK_COMPLETED_STATUS = task.get('completed')
+        TASK_TITLE = task.get('title')
+        dict_data[USER_ID].append({
+                                  "task": TASK_TITLE,
+                                  "completed": TASK_COMPLETED_STATUS,
+                                  "username": USERNAME})
+    """print(dict_data)"""
+    with open('{}.json'.format(USER_ID), 'w') as f:
+        json.dump(dict_data, f)
